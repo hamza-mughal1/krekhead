@@ -7,13 +7,14 @@ class Krekhead():
 
         self.main_x = 0
         self.main_y = 0
-        self.window_width = 1100
-        self.window_height = 900
+        self.window_width = 600
+        self.window_height = 600
         self.caption = "KREKHEAD"
 
     def initialize(self):
         win = pygame.display.set_mode((self.window_width,self.window_height))
         pygame.display.set_caption(self.caption)
+        pygame.display.set_icon(pygame.image.load("ghost.png"))
         return win
     
     def check_for_close(self):
@@ -45,22 +46,33 @@ class Krek():
     def move(self,x,y):
         self.x += x
         self.y += y
+    
+    def jump(self, jump_height, jump_velocity, gravity):  
+        pass
 
 
 krek = Krekhead()
 win = krek.initialize()
 
-player = Krek(krek.main_x,krek.main_y,500,400)
+player = Krek(krek.main_x,krek.main_y,250,250)
 
-
+font = pygame.font.Font('freesansbold.ttf', 32)
+text = font.render('KYS YOU DUMB FUCK', True, (0, 255, 0), (0, 0, 128))
 run = True
 move_left = False
 move_right = False
-steps = 1
+steps = 6
+isJump = False
+jump_height = 20
+jump_velocity = jump_height
+gravity = 2
+
 
 
 while run:
-    win.fill((150,150,150)) 
+    pygame.time.delay(10)
+    win.fill((150,150,150))
+    win.blit(text, (krek.window_width-450, krek.window_height - 400))
     for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -70,17 +82,30 @@ while run:
                     move_left = True
                 elif event.key == pygame.K_RIGHT:
                     move_right = True
+                elif event.key == pygame.K_SPACE:
+                    isJump = True
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT:
                     move_left = False
                 elif event.key == pygame.K_RIGHT:
                     move_right = False
+                elif event.key == pygame.K_SPACE:
+                    pass
                 
+
+
     if move_left:
         player.move(-steps,0)
     elif move_right:
         player.move(steps,0)
+    
+    if isJump:
+       player.y -= jump_velocity
+       jump_velocity -= gravity
+       if jump_velocity < - jump_height:
+           isJump = False
+           jump_velocity = jump_height
 
     player.draw(win)
 
