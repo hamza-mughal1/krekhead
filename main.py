@@ -9,7 +9,7 @@ class Krekhead():
         self.main_y = 0
         self.window_width = 600
         self.window_height = 600
-        self.caption = "KREKHEAD"
+        self.caption = "KREKHED"
 
     def initialize(self):
         win = pygame.display.set_mode((self.window_width,self.window_height))
@@ -47,8 +47,13 @@ class Krek():
         self.x += x
         self.y += y
     
-    def jump(self, jump_height, jump_velocity, gravity):  
-        pass
+    def jump(self,gravity):  
+        global isJump, jump_velocity, jump_height
+        player.y -= jump_velocity
+        jump_velocity -= gravity
+        if jump_velocity < - jump_height:
+            isJump = False
+            jump_velocity = jump_height
 
 
 krek = Krekhead()
@@ -57,7 +62,7 @@ win = krek.initialize()
 player = Krek(krek.main_x,krek.main_y,250,250)
 
 font = pygame.font.Font('freesansbold.ttf', 32)
-text = font.render('KYS YOU DUMB FUCK', True, (0, 255, 0), (0, 0, 128))
+text = font.render('Test 1', True, (0, 255, 0), (0, 0, 128))
 run = True
 move_left = False
 move_right = False
@@ -99,13 +104,9 @@ while run:
         player.move(-steps,0)
     elif move_right:
         player.move(steps,0)
-    
     if isJump:
-       player.y -= jump_velocity
-       jump_velocity -= gravity
-       if jump_velocity < - jump_height:
-           isJump = False
-           jump_velocity = jump_height
+        player.jump(gravity)
+    
 
     player.draw(win)
 

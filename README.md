@@ -1,2 +1,4 @@
 # krekhead
- blah blah blah
+
+ An official project by the Krekheds
+ KREKHEAD - THE GAME 
